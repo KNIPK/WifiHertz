@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">WifiHertz</string>
-    <string name="hello_world">Hello Android in two editors!</string>
+    <string name="hello_world">Hi Android in two editors!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">WifiHertz</string>
 
