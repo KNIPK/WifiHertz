@@ -23,20 +23,12 @@
         <activity
             android:name=".WyborMapy"
             android:label="@string/title_activity_wybor_mapy" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".EkranPomiaru"
             android:label="@string/title_activity_ekran_pomiaru" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

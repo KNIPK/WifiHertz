@@ -69,6 +69,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/editText1"
         android:layout_marginTop="60dp"
-        android:text="@string/zaloguj" />
+        android:text="@string/zaloguj" 
+        android:onClick="zaloguj"/>
 
 </RelativeLayout>

@@ -11,5 +11,10 @@
     <string name="title_activity_wybor_mapy">WyborMapy</string>
     <string name="wyborMapyInfo">Tutaj pojawi się lista dostępnych map. Narazie zaimprowizowałem je buttonami.</string>
     <string name="title_activity_ekran_pomiaru">EkranPomiaru</string>
+    <string name="mapa_1">Mapa 1</string>
+    <string name="mapa_2">Mapa 2</string>
+    <string name="mapa_3">Mapa 3</string>
+    <string name="zalogowano_jako_">"Zalogowano jako: "</string>
+    <string name="userID">none</string>
 
 </resources>
