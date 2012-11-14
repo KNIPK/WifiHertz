@@ -8,5 +8,8 @@
     <string name="haslo">Hasło</string>
     <string name="zaloguj">Zaloguj</string>
     <string name="logoprogramu">logoProgramu</string>
+    <string name="title_activity_wybor_mapy">WyborMapy</string>
+    <string name="wyborMapyInfo">Tutaj pojawi się lista dostępnych map. Narazie zaimprowizowałem je buttonami.</string>
+    <string name="title_activity_ekran_pomiaru">EkranPomiaru</string>
 
 </resources>
