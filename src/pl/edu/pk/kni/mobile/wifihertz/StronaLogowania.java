@@ -1,12 +1,21 @@
 package pl.edu.pk.kni.mobile.wifihertz;
 
-import java.util.Random;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 
 public class StronaLogowania extends Activity {
 
@@ -22,9 +31,32 @@ public class StronaLogowania extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    public void zaloguj(View view){
-    	String idUzytkownika = new String();
-    	idUzytkownika = Integer.toString(new Random().nextInt());
+    public void zaloguj(View view) throws ClientProtocolException, IOException{
+    	String idUzytkownika = new String("0");
+    	String URL = getResources().getString(R.string.urlLogowania); 
+    	
+    	String login = ((EditText)findViewById(R.id.editText2)).getText().toString();
+    	String pass =  ((EditText)findViewById(R.id.editText1)).getText().toString();
+    	URL +="?login="+login+"&pass="+pass;
+    	
+    	System.out.println(URL);
+    	
+    	
+    	HttpClient httpclient = new DefaultHttpClient();
+		HttpResponse response = httpclient.execute(new HttpGet(URL));
+		StatusLine statusLine = response.getStatusLine();
+		if(statusLine.getStatusCode()==HttpStatus.SC_OK){
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			response.getEntity().writeTo(out);
+			out.close();
+			idUzytkownika = out.toString();
+		}
+  
+    	
+    	
+    	
+    	
+    	//idUzytkownika = Integer.toString(new Random().nextInt());
     	if(!idUzytkownika.equals("0")){//warunek zalogowania
     		Intent intent = new Intent(this, WyborMapy.class);
         	intent.putExtra(USER_ID, idUzytkownika);

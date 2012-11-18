@@ -16,5 +16,6 @@
     <string name="mapa_3">Mapa 3</string>
     <string name="zalogowano_jako_">"Zalogowano jako: "</string>
     <string name="userID">none</string>
+    <string name="urlLogowania">http://kni.pk.edu.pl/~jaworek/wifi.html</string>
 
 </resources>

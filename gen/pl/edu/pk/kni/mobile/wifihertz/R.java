@@ -49,6 +49,7 @@ public final class R {
         public static final int title_activity_ekran_pomiaru=0x7f04000a;
         public static final int title_activity_main=0x7f040003;
         public static final int title_activity_wybor_mapy=0x7f040008;
+        public static final int urlLogowania=0x7f040010;
         public static final int userID=0x7f04000f;
         public static final int wyborMapyInfo=0x7f040009;
         public static final int zalogowano_jako_=0x7f04000e;
