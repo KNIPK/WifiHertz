@@ -5,9 +5,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
 
 public class WyborMapy extends Activity {
 
+	public static String SCIEZKA_DO_MAPY = "pl.edu.pk.kni.mobile.wifiHertz.wyborMapy.map_path";
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,5 +28,14 @@ public class WyborMapy extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_wybor_mapy, menu);
         return true;
+    }
+    
+    public void wyswietlMape(View view){
+    	String sciezkaDoMapy = new String();
+    	sciezkaDoMapy = "sciezka do mapy";
+    	Intent intent = new Intent(this, EkranPomiaru.class);
+    	intent.putExtra(SCIEZKA_DO_MAPY, sciezkaDoMapy);
+    	startActivity(intent);
+    	
     }
 }
