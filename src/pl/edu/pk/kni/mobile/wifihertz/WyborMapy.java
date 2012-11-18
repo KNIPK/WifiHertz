@@ -26,6 +26,7 @@ public class WyborMapy extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    	
         getMenuInflater().inflate(R.menu.activity_wybor_mapy, menu);
         return true;
     }

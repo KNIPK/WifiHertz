@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,7 +32,7 @@ public class StronaLogowania extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    public void zaloguj(View view) throws ClientProtocolException, IOException{
+    public void zaloguj(View view){
     	String idUzytkownika = new String("0");
     	String URL = getResources().getString(R.string.urlLogowania); 
     	
@@ -43,13 +44,23 @@ public class StronaLogowania extends Activity {
     	
     	
     	HttpClient httpclient = new DefaultHttpClient();
-		HttpResponse response = httpclient.execute(new HttpGet(URL));
-		StatusLine statusLine = response.getStatusLine();
-		if(statusLine.getStatusCode()==HttpStatus.SC_OK){
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			response.getEntity().writeTo(out);
-			out.close();
-			idUzytkownika = out.toString();
+		HttpResponse response = null;
+		try {
+			response = httpclient.execute(new HttpGet(URL));
+			StatusLine statusLine = response.getStatusLine();
+			if(statusLine.getStatusCode()==HttpStatus.SC_OK){
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				response.getEntity().writeTo(out);
+				out.close();
+				idUzytkownika = out.toString();
+			}
+		}
+		catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
   
     	
@@ -61,6 +72,12 @@ public class StronaLogowania extends Activity {
     		Intent intent = new Intent(this, WyborMapy.class);
         	intent.putExtra(USER_ID, idUzytkownika);
         	startActivity(intent);
+    	}
+    	else{
+    		 AlertDialog alert = new AlertDialog.Builder(this).create();
+	        alert.setTitle("Nieudane logowanie");
+	        alert.setMessage("Nie udał się zalogować. Sprawdź połączenie z internetem, login oraz hasło.");
+	        alert.show();
     	}
     }
     
