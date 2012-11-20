@@ -38,7 +38,7 @@ public class StronaLogowania extends Activity {
     	
     	String login = ((EditText)findViewById(R.id.editText2)).getText().toString();
     	String pass =  ((EditText)findViewById(R.id.editText1)).getText().toString();
-    	URL +="?login="+login+"&pass="+pass;
+    	URL +=","+login+","+pass;
     	
     	System.out.println(URL);
     	
