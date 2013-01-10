@@ -1,11 +1,12 @@
 package pl.edu.pk.kni.mobile.wifihertz;
 
 import android.app.Activity;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Menu;
 
 public class EkranPomiaru extends Activity {
-	  
+	WifiManager wifi;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
