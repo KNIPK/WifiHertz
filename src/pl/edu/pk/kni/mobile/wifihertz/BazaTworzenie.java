@@ -7,7 +7,7 @@ import static pl.edu.pk.kni.mobile.wifihertz.BazaStale.*;
 
 public class BazaTworzenie extends SQLiteOpenHelper {
 	private static final String NAZWA_BAZY_DANYCH = "baza.db";
-	private static final int WERSJA_BAZY_DANYCH = 3;
+	private static final int WERSJA_BAZY_DANYCH = 4;
 	
 	/*Tworzy obiekt pomocniczy dla bazy*/
 	public BazaTworzenie(Context ktks){
@@ -17,7 +17,7 @@ public class BazaTworzenie extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase bd) {
 		bd.execSQL("CREATE TABLE " + NAZWA_TABELI + " ("+ _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
-				IMAGE_ID +" INTEGER, "+ DATA_TIME +" INTEGER, "+WIFI_NAME+" TEXT NOT NULL, "+WIFI_SSID+" TEXT NOT NULL, " +
+				IMAGE_ID +" TEXT NOT NULL, "+ DATA_TIME +" INTEGER, "+WIFI_NAME+" TEXT NOT NULL, "+WIFI_SSID+" TEXT NOT NULL, " +
 						WIFI_RANGE+" TEXT NOT NULL, "+POSITION_X+" INTEGER, "+POSITION_Y+" INTEGER);");
 		
 	}
