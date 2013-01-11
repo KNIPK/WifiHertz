@@ -1,5 +1,9 @@
 package pl.edu.pk.kni.mobile.wifihertz;
 
+import java.io.File;
+
+import android.os.Environment;
+
 
 
 
@@ -47,7 +51,12 @@ public class InformacjeOmapie {
 	}
 	@Override
 	public String toString() {
-		return nazwa;
+		String wynik = new String(nazwa);
+		File plik = new File(Environment.getExternalStorageDirectory().toString(), Integer.toString(id)+".png"); 
+		if(plik.exists())
+			wynik+= " (pobrane)";
+		
+		return wynik;
 	
 	}
 	
