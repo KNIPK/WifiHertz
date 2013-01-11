@@ -3,7 +3,6 @@ package pl.edu.pk.kni.mobile.wifihertz;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -43,6 +43,8 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 
 	float wcisniecieX;
 	float wcisniecieY;
+
+	Baza bazaPunktow;
 
 	public boolean onTouch(View v, MotionEvent event) {
 
@@ -81,6 +83,14 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		return true;
 	}
 
+	private void dodajPunkt() {
+		System.out.println("Zbadano sieć w: "+polozenieZnacznikaX+" "+polozenieZnacznikaY);
+		listaPunktow.add(new PointF(polozenieZnacznikaX, polozenieZnacznikaY));
+		bazaPunktow.dodajDane(informacjeOmapie.getId(), "nieWiem", "nieWiem",
+				"nieWiem", (int) polozenieZnacznikaX,	(int) polozenieZnacznikaY);
+
+	}
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
@@ -89,8 +99,8 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 			break;
 		case R.id.menu_settings_pomiar:
 			Log.d(INPUT_METHOD_SERVICE, "Pobrano parametry sieci");
-			listaPunktow.add(new PointF(polozenieZnacznikaX,
-					polozenieZnacznikaY));
+			dodajPunkt();
+
 			break;
 
 		default:
@@ -105,16 +115,15 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 			URL url = new URL(informacjeOmapie.getAdresBitmapy());
 			URLConnection conn = url.openConnection();
 			bitmapaMapy = BitmapFactory.decodeStream(conn.getInputStream());
-			
-			
-			
+
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		}
 		FileOutputStream out;
 		try {
-			File plik = new File(Environment.getExternalStorageDirectory().toString(), informacjeOmapie.getId()+".png"); 
+			File plik = new File(Environment.getExternalStorageDirectory()
+					.toString(), informacjeOmapie.getId() + ".png");
 			out = new FileOutputStream(plik);
 			bitmapaMapy.compress(Bitmap.CompressFormat.PNG, 90, out);
 		} catch (FileNotFoundException e) {
@@ -123,7 +132,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 			alert.show();
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("Pobrano plik z serwera");
 	}
 
@@ -133,6 +142,9 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		String nazwa = getIntent().getStringExtra("nazwa");
 		String adres = getIntent().getStringExtra("adres");
 		zalogowanyJako = Integer.valueOf(getIntent().getStringExtra("idUsera"));
+
+		bazaPunktow = new Baza(this);
+
 		int id_obrazka = Integer.valueOf(getIntent()
 				.getStringExtra("idObrazka"));
 
@@ -143,32 +155,45 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 
 		setContentView(mapa);
 		listaPunktow = new ArrayList<PointF>();
+		zaladujPunktyZbazy();
 		mapa.setOnTouchListener(this);
 		fps = 20;
-
-
 
 	}
 
 	private void zaladujBitmape() {
-		//bitmapaMapy = BitmapFactory.decodeResource(getResources(),R.drawable.plan);
-		
-		File plik = new File(Environment.getExternalStorageDirectory().toString(), informacjeOmapie.getId()+".png"); 
-		if(!plik.exists())
-			pobierzMapeZserwera();
-		
-			bitmapaMapy = BitmapFactory.decodeFile(plik.getAbsolutePath());
-			System.out.println("Otworzono mapę.");	
-		
-		
-		
+		// bitmapaMapy =
+		// BitmapFactory.decodeResource(getResources(),R.drawable.plan);
 
+		File plik = new File(Environment.getExternalStorageDirectory()
+				.toString(), informacjeOmapie.getId() + ".png");
+		if (!plik.exists())
+			pobierzMapeZserwera();
+
+		bitmapaMapy = BitmapFactory.decodeFile(plik.getAbsolutePath());
+		System.out.println("Otworzono mapę.");
+
+	}
+
+	private void zaladujPunktyZbazy() {
+		Cursor c = bazaPunktow.pobierzDane(informacjeOmapie.getId());
+		c.moveToFirst();
+		float x,y;
+		if(c.getCount()>0)
+			do{
+				x = c.getFloat(c.getColumnIndex("positionX"));
+				y = c.getFloat(c.getColumnIndex("positionY"));
+				listaPunktow.add(new PointF(x,y));
+			}
+			while(c.moveToNext());
+		c.close();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		mapa.pause();
+		bazaPunktow.synchronizuj();
 	}
 
 	@Override

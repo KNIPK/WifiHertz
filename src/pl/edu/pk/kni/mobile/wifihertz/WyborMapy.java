@@ -16,6 +16,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -46,6 +47,16 @@ public class WyborMapy extends ListActivity implements OnItemClickListener {
 
 		// setContentView(R.layout.activity_wybor_mapy);
 	}
+	
+	
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		this.deleteDatabase("baza.db");
+		return true;
+	}
+
+
 
 	private void pobierzListeMap() {
 

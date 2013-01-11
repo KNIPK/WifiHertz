@@ -114,7 +114,7 @@ public class Baza {
 		        alert2.show();
 			}
 		}
-		
+		System.out.println("Wykonano synchronizacje");
 	}
 	
 	
