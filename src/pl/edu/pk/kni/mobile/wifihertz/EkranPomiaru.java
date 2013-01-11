@@ -1,11 +1,15 @@
 package pl.edu.pk.kni.mobile.wifihertz;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +17,7 @@ import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,11 +105,26 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 			URL url = new URL(informacjeOmapie.getAdresBitmapy());
 			URLConnection conn = url.openConnection();
 			bitmapaMapy = BitmapFactory.decodeStream(conn.getInputStream());
+			
+			
+			
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 		}
-		 
-
+		FileOutputStream out;
+		try {
+			File plik = new File(Environment.getExternalStorageDirectory().toString(), informacjeOmapie.getId()+".png"); 
+			out = new FileOutputStream(plik);
+			bitmapaMapy.compress(Bitmap.CompressFormat.PNG, 90, out);
+		} catch (FileNotFoundException e) {
+			AlertDialog alert = new AlertDialog.Builder(this).create();
+			alert.setMessage("Nie udało się zapisać pliku.");
+			alert.show();
+			e.printStackTrace();
+		}
+		
+		System.out.println("Pobrano plik z serwera");
 	}
 
 	@Override
@@ -132,11 +152,15 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 
 	private void zaladujBitmape() {
 		//bitmapaMapy = BitmapFactory.decodeResource(getResources(),R.drawable.plan);
-		// sprawdz w katalogu obecnosc plik <id_obrazka>.<rozszerzenieObrazka>
-		// jesli jest
-		// wyswietl ten plik
-		// jesli nie
-		pobierzMapeZserwera();
+		
+		File plik = new File(Environment.getExternalStorageDirectory().toString(), informacjeOmapie.getId()+".png"); 
+		if(!plik.exists())
+			pobierzMapeZserwera();
+		
+			bitmapaMapy = BitmapFactory.decodeFile(plik.getAbsolutePath());
+			System.out.println("Otworzono mapę.");	
+		
+		
 		
 
 	}
