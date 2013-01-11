@@ -1,5 +1,8 @@
 package pl.edu.pk.kni.mobile.wifihertz;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -93,13 +96,27 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	}
 
 	private void pobierzMapeZserwera() {
-		// TODO napisać pobieranie mapy z serwera
+		try {
+			URL url = new URL(informacjeOmapie.getAdresBitmapy());
+			URLConnection conn = url.openConnection();
+			bitmapaMapy = BitmapFactory.decodeStream(conn.getInputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
 
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		String nazwa = getIntent().getStringExtra("nazwa");
+		String adres = getIntent().getStringExtra("adres");
+		zalogowanyJako = Integer.valueOf(getIntent().getStringExtra("idUsera"));
+		int id_obrazka = Integer.valueOf(getIntent()
+				.getStringExtra("idObrazka"));
+
+		informacjeOmapie = new InformacjeOmapie(adres, id_obrazka, nazwa);
 		zaladujBitmape();
 		mapa = new Mapa(this);
 		setContentView(R.layout.activity_ekran_pomiaru);
@@ -109,24 +126,18 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		mapa.setOnTouchListener(this);
 		fps = 20;
 
-		String nazwa = getIntent().getStringExtra("nazwa");
-		String adres = getIntent().getStringExtra("adres");
-		zalogowanyJako = Integer.valueOf(getIntent().getStringExtra("idUsera"));
-		int id_obrazka = Integer.valueOf(getIntent()
-				.getStringExtra("idObrazka"));
 
-		informacjeOmapie = new InformacjeOmapie(adres, id_obrazka, nazwa);
 
 	}
 
 	private void zaladujBitmape() {
-		bitmapaMapy = BitmapFactory.decodeResource(getResources(),
-				R.drawable.plan);
+		//bitmapaMapy = BitmapFactory.decodeResource(getResources(),R.drawable.plan);
 		// sprawdz w katalogu obecnosc plik <id_obrazka>.<rozszerzenieObrazka>
 		// jesli jest
 		// wyswietl ten plik
 		// jesli nie
-		// pobierzMapeZserwera()
+		pobierzMapeZserwera();
+		
 
 	}
 
