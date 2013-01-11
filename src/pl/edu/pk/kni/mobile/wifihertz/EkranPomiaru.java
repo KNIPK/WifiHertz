@@ -3,7 +3,6 @@ package pl.edu.pk.kni.mobile.wifihertz;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +32,10 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	int fps;
 	InformacjeOmapie informacjeOmapie;
 	int zalogowanyJako;
+	
+	float wcisniecieX;
+	float wcisniecieY;
+	
 
 	public boolean onTouch(View v, MotionEvent event) {
 
@@ -42,33 +45,73 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		
 		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			polozenieZnacznikaX = event.getX();
-			polozenieZnacznikaY = event.getY();
-			Log.d(INPUT_METHOD_SERVICE, "Przestawiono znacznik");
+			case MotionEvent.ACTION_DOWN:
+				polozenieZnacznikaX = event.getX();
+				polozenieZnacznikaY = event.getY();
+				
+				wcisniecieX = event.getX();
+				wcisniecieY = event.getY();
+				
+				Log.d(INPUT_METHOD_SERVICE, "Przestawiono znacznik");
+				break;
+				
+				
+			case MotionEvent.ACTION_MOVE:
+
+				polozenieMapyX += event.getX() - wcisniecieX;
+				polozenieMapyY += event.getY() - wcisniecieY;
+				wcisniecieX = event.getX();
+				wcisniecieY = event.getY();
+				break;
+				
+				
+			case MotionEvent.ACTION_UP:
+				polozenieMapyX += event.getX() - wcisniecieX;
+				polozenieMapyY += event.getY() - wcisniecieY;
+				break;
+				
+			default:
+				//return super.onTouchEvent(event);
+				
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_settings_pobranie_mapy:
+			pobierzMapeZserwera();
+			break;
+		case R.id.menu_settings_pomiar:
+			Log.d(INPUT_METHOD_SERVICE, "Pobrano parametry sieci");
+			listaPunktow.add(new PointF(polozenieZnacznikaX,
+					polozenieZnacznikaY));
 			break;
 
 		default:
 			break;
 		}
 
-		return false;
+		return true;
 	}
 
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		Log.d(INPUT_METHOD_SERVICE, "Pobrano parametry sieci");
-		listaPunktow.add(new PointF(polozenieZnacznikaX, polozenieZnacznikaY));
-		return true;
+	private void pobierzMapeZserwera() {
+		// TODO napisać pobieranie mapy z serwera
+
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		bitmapaMapy = BitmapFactory.decodeResource(getResources(),
-				R.drawable.plan);
+		zaladujBitmape();
 		mapa = new Mapa(this);
+		setContentView(R.layout.activity_ekran_pomiaru);
+		
 		setContentView(mapa);
 		listaPunktow = new ArrayList<PointF>();
 		mapa.setOnTouchListener(this);
@@ -77,13 +120,25 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		String nazwa = getIntent().getStringExtra("nazwa");
 		String adres = getIntent().getStringExtra("adres");
 		zalogowanyJako = Integer.valueOf(getIntent().getStringExtra("idUsera"));
-		int id_obrazka = Integer.valueOf(getIntent().getStringExtra("idObrazka"));
-		
-		informacjeOmapie = new InformacjeOmapie(adres,id_obrazka, nazwa);
-		
+		int id_obrazka = Integer.valueOf(getIntent()
+				.getStringExtra("idObrazka"));
+
+		informacjeOmapie = new InformacjeOmapie(adres, id_obrazka, nazwa);
 
 	}
 
+	private void zaladujBitmape() {
+		bitmapaMapy = BitmapFactory.decodeResource(getResources(),
+				R.drawable.plan);
+		// sprawdz w katalogu obecnosc plik <id_obrazka>.<rozszerzenieObrazka>
+		// jesli jest
+		// wyswietl ten plik
+		// jesli nie
+		// pobierzMapeZserwera()
+
+	}
+
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
