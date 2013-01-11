@@ -84,7 +84,7 @@ public class Baza {
 		Cursor kursor = pobierzDane(0);
 		
 		
-		/*tworzymy sobie klienta http, zebysmy mogli przesy³aæ dane do serwera*/
+		/*tworzymy sobie klienta http, zebysmy mogli przesyï¿½aï¿½ dane do serwera*/
 		HttpClient httpclient = new DefaultHttpClient();
 //		HttpResponse response = null;
 		
@@ -104,13 +104,13 @@ public class Baza {
 			}
 			catch (ClientProtocolException e) {
 				AlertDialog alert = new AlertDialog.Builder(activity).create();
-				alert.setTitle("B³¹d synchronizacji");
+				alert.setTitle("BÅ‚Ä…d synchronizacji");
 		        alert.setMessage(e.toString());
 		        alert.show();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				AlertDialog alert2 = new AlertDialog.Builder(activity).create();
-				alert2.setTitle("B³¹d synchronizacji");
+				alert2.setTitle("BÅ‚Ä…d synchronizacji");
 		        alert2.setMessage(e.toString());
 		        alert2.show();
 			}
