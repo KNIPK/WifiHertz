@@ -3,6 +3,7 @@ package pl.edu.pk.kni.mobile.wifihertz;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -13,12 +14,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class WyborMapy extends Activity {
+public class WyborMapy extends ListActivity {
 
 	public static String SCIEZKA_DO_MAPY = "pl.edu.pk.kni.mobile.wifiHertz.wyborMapy.map_path";
 	int zalogowanyJako;
@@ -32,9 +36,14 @@ public class WyborMapy extends Activity {
 		zalogowanyJako = Integer.valueOf(intent
 				.getStringExtra(StronaLogowania.USER_ID));
 
-		setContentView(R.layout.activity_wybor_mapy);
+		
 		listaMap = new ArrayList<InformacjeOmapie>();
 		pobierzListeMap();
+		
+		setListAdapter(new ArrayAdapter<InformacjeOmapie>(this,R.layout.lista_map, listaMap));
+		ListView lista = getListView();
+		
+		//setContentView(R.layout.activity_wybor_mapy);
 	}
 	
 	
