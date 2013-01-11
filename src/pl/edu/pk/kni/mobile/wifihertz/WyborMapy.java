@@ -3,7 +3,6 @@ package pl.edu.pk.kni.mobile.wifihertz;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -13,16 +12,17 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class WyborMapy extends ListActivity {
+public class WyborMapy extends ListActivity implements OnItemClickListener {
 
 	public static String SCIEZKA_DO_MAPY = "pl.edu.pk.kni.mobile.wifiHertz.wyborMapy.map_path";
 	int zalogowanyJako;
@@ -36,56 +36,70 @@ public class WyborMapy extends ListActivity {
 		zalogowanyJako = Integer.valueOf(intent
 				.getStringExtra(StronaLogowania.USER_ID));
 
-		
 		listaMap = new ArrayList<InformacjeOmapie>();
 		pobierzListeMap();
-		
-		setListAdapter(new ArrayAdapter<InformacjeOmapie>(this,R.layout.lista_map, listaMap));
-		ListView lista = getListView();
-		
-		//setContentView(R.layout.activity_wybor_mapy);
-	}
-	
-	
-	
-	private void pobierzListeMap(){
-		
-    	String URL = "http://wifihertz.kalinowski.net.pl/userImages"; 
 
-    	URL +=","+zalogowanyJako;
-    	
-    	System.out.println(URL);
-    	
-    	
-    	HttpClient httpclient = new DefaultHttpClient();
+		setListAdapter(new ArrayAdapter<InformacjeOmapie>(this,
+				R.layout.lista_map, listaMap));
+		ListView lista = getListView();
+		lista.setOnItemClickListener(this);
+
+		// setContentView(R.layout.activity_wybor_mapy);
+	}
+
+	private void pobierzListeMap() {
+
+		String URL = "http://wifihertz.kalinowski.net.pl/userImages";
+
+		URL += "," + zalogowanyJako;
+
+		System.out.println(URL);
+
+		HttpClient httpclient = new DefaultHttpClient();
 		HttpResponse response = null;
 		try {
 			response = httpclient.execute(new HttpGet(URL));
 			StatusLine statusLine = response.getStatusLine();
-			if(statusLine.getStatusCode()==HttpStatus.SC_OK){
+			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				response.getEntity().writeTo(out);
 				out.close();
-				String[] linijkiDoPrzetworzenia = out.toString().split("<br />");
+				String[] linijkiDoPrzetworzenia = out.toString()
+						.split("<br />");
 				for (int i = 0; i < linijkiDoPrzetworzenia.length; i++) {
-					String[] podzialLinijki = linijkiDoPrzetworzenia[i].split(" ");
-					InformacjeOmapie nowaMapa = new InformacjeOmapie(podzialLinijki[1], Integer.valueOf(podzialLinijki[0]), podzialLinijki[2]);
+					String[] podzialLinijki = linijkiDoPrzetworzenia[i]
+							.split(" ");
+					InformacjeOmapie nowaMapa = new InformacjeOmapie(
+							podzialLinijki[1],
+							Integer.valueOf(podzialLinijki[0]),
+							podzialLinijki[2]);
 					listaMap.add(nowaMapa);
-					
+
 				}
-				
+
 			}
-		}
-		catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
+		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	public void onItemClick(AdapterView<?> arg0, View v, int index, long l) {
+		// TODO uruchomienie activity pomiaru
+		String nazwa = listaMap.get(index).getNazwa();
+		String adres = listaMap.get(index).getAdresBitmapy();
+		String idObrazka = Integer.toString(listaMap.get(index).getId());
+		
+		Intent intent = new Intent(this, EkranPomiaru.class);
+
+		intent.putExtra("nazwa", nazwa);
+		intent.putExtra("adres", adres);
+		intent.putExtra("idObrazka", idObrazka);
+		intent.putExtra("idUsera", Integer.toString(zalogowanyJako));
+		
+		startActivity(intent);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,11 +109,11 @@ public class WyborMapy extends ListActivity {
 	}
 
 	public void wyswietlMape(View view) {
-		String sciezkaDoMapy = new String();
-		sciezkaDoMapy = "sciezka do mapy";
-		Intent intent = new Intent(this, EkranPomiaru.class);
-		intent.putExtra(SCIEZKA_DO_MAPY, sciezkaDoMapy);
-		startActivity(intent);
+		// String sciezkaDoMapy = new String();
+		// sciezkaDoMapy = "sciezka do mapy";
+		// Intent intent = new Intent(this, EkranPomiaru.class);
+		// intent.putExtra(SCIEZKA_DO_MAPY, sciezkaDoMapy);
+		// startActivity(intent);
 
 	}
 }

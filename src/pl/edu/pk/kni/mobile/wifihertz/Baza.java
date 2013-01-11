@@ -108,7 +108,6 @@ public class Baza {
 		        alert.setMessage(e.toString());
 		        alert.show();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				AlertDialog alert2 = new AlertDialog.Builder(activity).create();
 				alert2.setTitle("Błąd synchronizacji");
 		        alert2.setMessage(e.toString());
