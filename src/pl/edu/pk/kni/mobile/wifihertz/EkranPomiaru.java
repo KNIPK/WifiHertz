@@ -32,10 +32,9 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	int fps;
 	InformacjeOmapie informacjeOmapie;
 	int zalogowanyJako;
-	
+
 	float wcisniecieX;
 	float wcisniecieY;
-	
 
 	public boolean onTouch(View v, MotionEvent event) {
 
@@ -45,37 +44,30 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				polozenieZnacznikaX = event.getX();
-				polozenieZnacznikaY = event.getY();
-				
-				wcisniecieX = event.getX();
-				wcisniecieY = event.getY();
-				
-				Log.d(INPUT_METHOD_SERVICE, "Przestawiono znacznik");
-				break;
-				
-				
-			case MotionEvent.ACTION_MOVE:
 
-				polozenieMapyX += event.getX() - wcisniecieX;
-				polozenieMapyY += event.getY() - wcisniecieY;
-				wcisniecieX = event.getX();
-				wcisniecieY = event.getY();
-				break;
-				
-				
-			case MotionEvent.ACTION_UP:
-				polozenieMapyX += event.getX() - wcisniecieX;
-				polozenieMapyY += event.getY() - wcisniecieY;
-				break;
-				
-			default:
-				//return super.onTouchEvent(event);
-				
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_MOVE:
+			polozenieMapyX += event.getX() - wcisniecieX;
+			polozenieMapyY += event.getY() - wcisniecieY;
+			wcisniecieX = event.getX();
+			wcisniecieY = event.getY();
+			break;
+
+		case MotionEvent.ACTION_DOWN:
+			polozenieZnacznikaX = event.getX() - polozenieMapyX;
+			polozenieZnacznikaY = event.getY() - polozenieMapyY;
+
+			wcisniecieX = event.getX();
+			wcisniecieY = event.getY();
+
+		case MotionEvent.ACTION_UP:
+			polozenieMapyX += event.getX() - wcisniecieX;
+			polozenieMapyY += event.getY() - wcisniecieY;
+			break;
+
+		default:
+			// return super.onTouchEvent(event);
+
 		}
 
 		return true;
@@ -111,7 +103,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		zaladujBitmape();
 		mapa = new Mapa(this);
 		setContentView(R.layout.activity_ekran_pomiaru);
-		
+
 		setContentView(mapa);
 		listaPunktow = new ArrayList<PointF>();
 		mapa.setOnTouchListener(this);
@@ -138,7 +130,6 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 
 	}
 
-	
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -187,11 +178,13 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 					float x = listaPunktow.get(i).x;
 					float y = listaPunktow.get(i).y;
 					c.drawBitmap(bitmapaPunktu, x - bitmapaPunktu.getWidth()
-							/ 2, y - bitmapaPunktu.getWidth() / 2, null);
+							/ 2 + polozenieMapyX, y - bitmapaPunktu.getWidth()
+							/ 2 + polozenieMapyY, null);
 				}
 				c.drawBitmap(bitmapaZnacznika, polozenieZnacznikaX
-						- bitmapaZnacznika.getWidth() / 2, polozenieZnacznikaY
-						- bitmapaZnacznika.getWidth() / 2, null);
+						- bitmapaZnacznika.getWidth() / 2 + polozenieMapyX,
+						polozenieZnacznikaY - bitmapaZnacznika.getWidth() / 2
+								+ polozenieMapyY, null);
 
 				holder.unlockCanvasAndPost(c);
 
