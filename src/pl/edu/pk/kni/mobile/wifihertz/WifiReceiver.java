@@ -34,7 +34,7 @@ public class WifiReceiver extends BroadcastReceiver
 		//robi pomiar wszystkich sieci i dodaje w pisy do bazy o wspolrzednych x, y
 		db = new Baza(ob1);
 		
-		ob1.wifi.startScan();
+		//ob1.wifi.startScan();
 		
 		for(ScanResult listka : res)
 		{  

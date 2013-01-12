@@ -171,6 +171,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	    wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 	    
         registerReceiver(wifiRec, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        wifi.startScan();
 	}
 
 	private void zaladujBitmape() {
