@@ -271,7 +271,11 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 			t = new Thread(this);
 			t.start();
 		}
-
+		@Override
+	    public void onStop()
+	    {
+	    	unregisterReceiver(wifiRec);
+	    }
 		public void pause() {
 			dzialaj = false;
 			while (true) {
