@@ -48,7 +48,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	float wcisniecieY;
 
 	Baza bazaPunktow;
-	WifiReceiver wifiRec;
+	WifiReceiver wifiRec = null;
 	
 	public boolean onTouch(View v, MotionEvent event) {
 
@@ -167,6 +167,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		{
 			wifiRec = new WifiReceiver(this);
 		}
+		
 	    wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 	    
         registerReceiver(wifiRec, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
