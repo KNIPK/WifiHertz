@@ -209,7 +209,11 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		Toast.makeText(this, "Trwa synchronizacja. Cierpliwości...", Toast.LENGTH_LONG).show();
 		bazaPunktow.synchronizuj();
 	}
-
+	@Override
+    public void onStop()
+    {
+    	unregisterReceiver(wifiRec);
+    }
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -271,11 +275,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 			t = new Thread(this);
 			t.start();
 		}
-		@Override
-	    public void onStop()
-	    {
-	    	unregisterReceiver(wifiRec);
-	    }
+		
 		public void pause() {
 			dzialaj = false;
 			while (true) {
