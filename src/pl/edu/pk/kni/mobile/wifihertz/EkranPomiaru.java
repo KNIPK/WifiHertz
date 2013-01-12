@@ -43,7 +43,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	int fps;
 	InformacjeOmapie informacjeOmapie;
 	int zalogowanyJako;
-
+	int id_obrazka;
 	float wcisniecieX;
 	float wcisniecieY;
 
@@ -91,7 +91,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		
 		System.out.println("Zbadano sieć w: "+polozenieZnacznikaX+" "+polozenieZnacznikaY);
 		listaPunktow.add(new PointF(polozenieZnacznikaX, polozenieZnacznikaY));
-		wifiRec.zrobPomiarWPunkcie(1,polozenieZnacznikaX, polozenieZnacznikaY);
+		wifiRec.zrobPomiarWPunkcie(id_obrazka, polozenieZnacznikaX, polozenieZnacznikaY);
 		
 	}
 
@@ -149,9 +149,9 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 
 		bazaPunktow = new Baza(this);
 
-		int id_obrazka = Integer.valueOf(getIntent()
+		id_obrazka = Integer.valueOf(getIntent()
 				.getStringExtra("idObrazka"));
-
+		
 		informacjeOmapie = new InformacjeOmapie(adres, id_obrazka, nazwa);
 		zaladujBitmape();
 		mapa = new Mapa(this);
