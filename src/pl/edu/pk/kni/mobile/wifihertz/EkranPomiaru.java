@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -86,6 +88,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	}
 
 	private void dodajPunkt() {
+		
 		System.out.println("Zbadano sieć w: "+polozenieZnacznikaX+" "+polozenieZnacznikaY);
 		listaPunktow.add(new PointF(polozenieZnacznikaX, polozenieZnacznikaY));
 		wifiRec.zrobPomiarWPunkcie(1,polozenieZnacznikaX, polozenieZnacznikaY);
@@ -160,7 +163,13 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		mapa.setOnTouchListener(this);
 		fps = 20;
 
-		wifiRec = new WifiReceiver(this);
+		if(wifiRec == null)
+		{
+			wifiRec = new WifiReceiver(this);
+		}
+	    wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+	    
+        registerReceiver(wifiRec, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 	}
 
 	private void zaladujBitmape() {

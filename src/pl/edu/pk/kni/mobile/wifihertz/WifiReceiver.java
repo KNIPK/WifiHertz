@@ -33,6 +33,7 @@ public class WifiReceiver extends BroadcastReceiver
 	public void zrobPomiarWPunkcie(int imageid, float x, float y){
 		//robi pomiar wszystkich sieci i dodaje w pisy do bazy o wspolrzednych x, y
 		db = new Baza(ob1);
+		
 		ob1.wifi.startScan();
 		
 		for(ScanResult listka : res)
