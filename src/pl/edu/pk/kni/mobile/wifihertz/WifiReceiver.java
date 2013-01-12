@@ -46,7 +46,7 @@ public class WifiReceiver extends BroadcastReceiver
 		
 	}
 	
-	public void zrobPomiarWPunkcie(float x, float y){
+	public void zrobPomiarWPunkcie(float x, float y, InformacjeOmapie informacjeOmapie){
 		//robi pomiar wszystkich sieci i dodaje w pisy do bazy o wspolrzednych x, y
 		
 	}

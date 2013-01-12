@@ -88,7 +88,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	private void dodajPunkt() {
 		System.out.println("Zbadano sieć w: "+polozenieZnacznikaX+" "+polozenieZnacznikaY);
 		listaPunktow.add(new PointF(polozenieZnacznikaX, polozenieZnacznikaY));
-		wifiRec.zrobPomiarWPunkcie(polozenieZnacznikaX, polozenieZnacznikaY);
+		wifiRec.zrobPomiarWPunkcie(polozenieZnacznikaX, polozenieZnacznikaY, informacjeOmapie);
 
 	}
 
