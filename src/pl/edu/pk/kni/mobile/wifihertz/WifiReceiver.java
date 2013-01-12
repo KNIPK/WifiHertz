@@ -12,14 +12,12 @@ import android.widget.Toast;
 
 public class WifiReceiver extends BroadcastReceiver 
 {
-	private static final String TAG = "WiFiDawaj";
+	
 	EkranPomiaru ob1;
-	static TextView textView1;
-	String text;
-	public String getText1()
-	{
-		return text;
-	}
+	List<ScanResult> res;
+	Baza db;
+	
+	
 	public WifiReceiver(EkranPomiaru ob1)
 	{
 		super();
@@ -29,26 +27,20 @@ public class WifiReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context arg0, Intent arg1) 
 	{
-		List<ScanResult> res = ob1.wifi.getScanResults();
-		ScanResult bstResult = null;
-		for(ScanResult r : res)
-		{
-			if( (bstResult == null) || (WifiManager.compareSignalLevel(bstResult.level, r.level) < 0))
-			{
-				bstResult = r;
-			//textView1.append( r.toString());
-			}
-		}
-		String msg = String.format("polaczen znaleziono: %s \n%s jest najsilniejsze \n%sdBm: zasieg", res.size(), bstResult.SSID, bstResult.level);
-		
-		
-		Toast.makeText(ob1, msg, Toast.LENGTH_LONG).show();
-		
+	     res = ob1.wifi.getScanResults();		
 	}
 	
-	public void zrobPomiarWPunkcie(float x, float y, InformacjeOmapie informacjeOmapie){
+	public void zrobPomiarWPunkcie(int imageid, float x, float y){
 		//robi pomiar wszystkich sieci i dodaje w pisy do bazy o wspolrzednych x, y
+		db = new Baza(ob1);
+		ob1.wifi.startScan();
 		
+		for(ScanResult listka : res)
+		{  
+			db.dodajDane(imageid, listka.SSID, listka.BSSID, ""+listka.level,(int)x, (int)y);
+		}
 	}
+	
+}
 	
 }
