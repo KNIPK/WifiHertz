@@ -52,7 +52,9 @@ public class StronaLogowania extends Activity {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				response.getEntity().writeTo(out);
 				out.close();
+				
 				idUzytkownika = out.toString();
+				System.out.println(out);
 			}
 		}
 		catch (ClientProtocolException e) {

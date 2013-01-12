@@ -26,6 +26,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Toast;
 
 public class EkranPomiaru extends Activity implements OnTouchListener {
 
@@ -45,7 +46,8 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	float wcisniecieY;
 
 	Baza bazaPunktow;
-
+	WifiReceiver wifiRec;
+	
 	public boolean onTouch(View v, MotionEvent event) {
 
 		// żeby nie zażynać sprzętu
@@ -86,8 +88,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	private void dodajPunkt() {
 		System.out.println("Zbadano sieć w: "+polozenieZnacznikaX+" "+polozenieZnacznikaY);
 		listaPunktow.add(new PointF(polozenieZnacznikaX, polozenieZnacznikaY));
-		bazaPunktow.dodajDane(informacjeOmapie.getId(), "nieWiem", "nieWiem",
-				"nieWiem", (int) polozenieZnacznikaX,	(int) polozenieZnacznikaY);
+		wifiRec.zrobPomiarWPunkcie(polozenieZnacznikaX, polozenieZnacznikaY);
 
 	}
 
@@ -159,6 +160,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		mapa.setOnTouchListener(this);
 		fps = 20;
 
+		wifiRec = new WifiReceiver(this);
 	}
 
 	private void zaladujBitmape() {
@@ -193,6 +195,7 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 	protected void onPause() {
 		super.onPause();
 		mapa.pause();
+		Toast.makeText(this, "Trwa synchronizacja. Cierpliwości...", Toast.LENGTH_LONG).show();
 		bazaPunktow.synchronizuj();
 	}
 
