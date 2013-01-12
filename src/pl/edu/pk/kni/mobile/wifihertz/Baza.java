@@ -98,6 +98,8 @@ public class Baza {
 			String wifiRange = kursor.getString(5);
 			String positionX = kursor.getString(6);
 			String positionY = kursor.getString(7);
+			
+			wifiName = wifiName.replace(" ", "_");
 	        
 			try {
 				httpclient.execute(new HttpGet("http://wifihertz.kalinowski.net.pl/index.php?page=addData&imageId="+imageId+"&dataId="+dataId+"&dataTime="+dataTime+"&wifiName="+wifiName+"&wifiSsid="+wifiSsid+"&wifiRange="+wifiRange+"&positionX="+positionX+"&positionY="+positionY));
