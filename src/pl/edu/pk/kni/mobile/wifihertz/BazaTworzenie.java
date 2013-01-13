@@ -7,7 +7,7 @@ import static pl.edu.pk.kni.mobile.wifihertz.BazaStale.*;
 
 public class BazaTworzenie extends SQLiteOpenHelper {
 	private static final String NAZWA_BAZY_DANYCH = "baza.db";
-	private static final int WERSJA_BAZY_DANYCH = 8;
+	private static final int WERSJA_BAZY_DANYCH = 9;
 	
 	/*Tworzy obiekt pomocniczy dla bazy*/
 	public BazaTworzenie(Context ktks){

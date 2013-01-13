@@ -1,11 +1,21 @@
 package pl.edu.pk.kni.mobile.wifihertz;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -152,6 +162,9 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		id_obrazka = Integer.valueOf(getIntent()
 				.getStringExtra("idObrazka"));
 		
+		
+		
+		
 		informacjeOmapie = new InformacjeOmapie(adres, id_obrazka, nazwa);
 		zaladujBitmape();
 		mapa = new Mapa(this);
@@ -159,6 +172,10 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 
 		setContentView(mapa);
 		listaPunktow = new ArrayList<PointF>();
+		
+		/*zsynchronizujemy dane z tymi, ktore sa na serwerze*/
+		pobierzZSerwera();
+		
 		zaladujPunktyZbazy();
 		mapa.setOnTouchListener(this);
 		fps = 20;
@@ -167,6 +184,8 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		{
 			wifiRec = new WifiReceiver(this);
 		}
+		
+		
 		
 	    wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 	    
@@ -200,6 +219,51 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 			}
 			while(c.moveToNext());
 		c.close();
+	}
+	
+	private void pobierzZSerwera(){
+		/*metoda pobiera punkty z serwera*/
+		int i = 0;
+		String positions = "";
+		
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpResponse response = null;
+		ByteArrayOutputStream out;
+		
+		while(true){
+			//tutaj synchro w 2 strone
+			
+			try {
+				response = httpclient.execute(new HttpGet("http://wifihertz.kalinowski.net.pl/index.php?page=getOneData&imageId="+id_obrazka+"&nr="+i));
+				StatusLine statusLine = response.getStatusLine();
+				if(statusLine.getStatusCode()==HttpStatus.SC_OK){
+					out = new ByteArrayOutputStream();
+					response.getEntity().writeTo(out);
+					out.close();
+					
+					positions = out.toString();
+					System.out.println(out);
+				}
+			}
+			catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if(positions.length()<3){
+				break;
+			}else{
+				String [] positions2 = positions.split(" ");
+				PointF p = new PointF(Float.valueOf(positions2[0]), Float.valueOf(positions2[1]));
+				if(!listaPunktow.contains(p))
+				{
+					listaPunktow.add(p);
+				}
+				i++;
+			}
+		}
+		
 	}
 
 	@Override
