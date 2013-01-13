@@ -35,6 +35,7 @@ public class WifiReceiver extends BroadcastReceiver
 		db = new Baza(ob1);
 		
 		//ob1.wifi.startScan();
+		res = ob1.wifi.getScanResults();
 		
 		for(ScanResult listka : res)
 		{  
