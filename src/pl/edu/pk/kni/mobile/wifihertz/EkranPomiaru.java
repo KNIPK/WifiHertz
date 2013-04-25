@@ -26,7 +26,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PointF;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -271,13 +270,14 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 		super.onPause();
 		mapa.pause();
 		Toast.makeText(this, "Trwa synchronizacja. Cierpliwości...", Toast.LENGTH_LONG).show();
-		bazaPunktow.synchronizuj();
+		bazaPunktow.synchronizuj(id_obrazka);
 	}
 //	@Override
 //    public void onStop()
 //    {
 //    	unregisterReceiver(wifiRec);
 //    }
+	
 	@Override
 	protected void onResume() {
 		super.onResume();

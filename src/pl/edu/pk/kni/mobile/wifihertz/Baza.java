@@ -50,6 +50,7 @@ public class Baza {
 	
 	private static String[] FROM = { _ID, IMAGE_ID, DATA_TIME, WIFI_NAME, WIFI_SSID, WIFI_RANGE, POSITION_X, POSITION_Y };
 	private static String ORDER_BY = _ID +" DESC";
+	
 	public Cursor pobierzDane(int idImage){
 		SQLiteDatabase db = baza.getReadableDatabase();
 		Cursor kursor = null;
@@ -79,9 +80,11 @@ public class Baza {
         return kursor;
 	}
 	
-	
 	public void synchronizuj(){
-		Cursor kursor = pobierzDane(0);
+		synchronizuj(0); //synchronizuj wszystkie
+	}
+	public void synchronizuj(int idImage){
+		Cursor kursor = pobierzDane(idImage);
 		
 		
 		/*tworzymy sobie klienta http, zebysmy mogli przesy�a� dane do serwera*/
