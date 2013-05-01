@@ -2,6 +2,7 @@ package pl.edu.pk.kni.mobile.wifihertz;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +41,10 @@ public class WifiReceiver extends BroadcastReceiver
 				}
 	    	System.out.println("onReceive uruchomiony");
 	 		this.czyZapisywacWynik = false;
+			AlertDialog alert = new AlertDialog.Builder(arg0).create();
+			alert.setTitle("Ok");
+			alert.setMessage("Pomiar wykonany pomyślnie");
+	        alert.show();
 	     }
 		     
 	}
@@ -53,9 +58,7 @@ public class WifiReceiver extends BroadcastReceiver
 		this.czyZapisywacWynik = true;
 		ob1.wifi.startScan();
 
-		
-		//res = ob1.wifi.getScanResults();
-		
+				
 		
 	}
 	
