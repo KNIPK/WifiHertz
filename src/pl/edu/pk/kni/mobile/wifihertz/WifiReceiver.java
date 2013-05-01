@@ -31,12 +31,16 @@ public class WifiReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context arg0, Intent arg1) 
 	{
+	
 	     res = ob1.wifi.getScanResults();
-	     if(czyZapisywacWynik)
-		     for(ScanResult listka : res)
-				{  
+	     if(czyZapisywacWynik){
+	    	 for(ScanResult listka : res){  
 					db.dodajDane(imageId, listka.SSID, listka.BSSID, ""+listka.level,(int)x, (int)y);
 				}
+	    	System.out.println("onReceive uruchomiony");
+	 		this.czyZapisywacWynik = false;
+	     }
+		     
 	}
 	
 	public void zrobPomiarWPunkcie(int imageid, float x, float y){
@@ -47,7 +51,7 @@ public class WifiReceiver extends BroadcastReceiver
 		this.imageId = imageid;
 		this.czyZapisywacWynik = true;
 		ob1.wifi.startScan();
-		
+
 		
 		//res = ob1.wifi.getScanResults();
 		

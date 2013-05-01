@@ -51,6 +51,12 @@ public class Baza {
 	private static String[] FROM = { _ID, IMAGE_ID, DATA_TIME, WIFI_NAME, WIFI_SSID, WIFI_RANGE, POSITION_X, POSITION_Y };
 	private static String ORDER_BY = _ID +" DESC";
 	
+	private void usunPomiarLokalny(int idPomiaru){
+		SQLiteDatabase db = baza.getWritableDatabase();
+		db.delete(NAZWA_TABELI, _ID+"="+idPomiaru, null);
+		
+	}
+	
 	public Cursor pobierzDane(int idImage){
 		SQLiteDatabase db = baza.getReadableDatabase();
 		Cursor kursor = null;
@@ -105,7 +111,8 @@ public class Baza {
 			wifiName = wifiName.replace(" ", "_");
 	        
 			try {
-				httpclient.execute(new HttpGet("http://wifihertz.kalinowski.net.pl/index.php?page=addData&imageId="+imageId+"&dataId="+dataId+"&dataTime="+dataTime+"&wifiName="+wifiName+"&wifiSsid="+wifiSsid+"&wifiRange="+wifiRange+"&positionX="+positionX+"&positionY="+positionY));
+				httpclient.execute(new HttpGet("http://wifihertz.kalinowski.net.pl/index.php?page=addData&imageId="+imageId+"&dataTime="+dataTime+"&wifiName="+wifiName+"&wifiSsid="+wifiSsid+"&wifiRange="+wifiRange+"&positionX="+positionX+"&positionY="+positionY));
+				usunPomiarLokalny(Integer.valueOf(dataId));
 			}
 			catch (ClientProtocolException e) {
 				AlertDialog alert = new AlertDialog.Builder(activity).create();
