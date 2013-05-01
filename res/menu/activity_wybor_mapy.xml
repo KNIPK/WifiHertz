@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_settings"
-        android:title="Usun lokalna baze danych"
+        android:title="Synchronizuj baze"
         android:orderInCategory="100" />
 </menu>

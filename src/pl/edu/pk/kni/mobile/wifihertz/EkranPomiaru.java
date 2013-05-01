@@ -267,16 +267,18 @@ public class EkranPomiaru extends Activity implements OnTouchListener {
 
 	@Override
 	protected void onPause() {
-		super.onPause();
-		mapa.pause();
 		Toast.makeText(this, "Trwa synchronizacja. Cierpliwości...", Toast.LENGTH_LONG).show();
 		bazaPunktow.synchronizuj(id_obrazka);
+		super.onPause();
+		mapa.pause();
+		
 	}
-//	@Override
-//    public void onStop()
-//    {
-//    	unregisterReceiver(wifiRec);
-//    }
+	@Override
+    public void onStop()
+    {
+    	super.onStop();
+		unregisterReceiver(wifiRec);
+    }
 	
 	@Override
 	protected void onResume() {

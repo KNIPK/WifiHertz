@@ -26,6 +26,7 @@ public class WifiReceiver extends BroadcastReceiver
 		super();
 		this.ob1 = ob1;
 		czyZapisywacWynik = false;
+		db = new Baza(ob1);
 	}
 	
 	@Override
@@ -45,7 +46,7 @@ public class WifiReceiver extends BroadcastReceiver
 	
 	public void zrobPomiarWPunkcie(int imageid, float x, float y){
 		//robi pomiar wszystkich sieci i dodaje w pisy do bazy o wspolrzednych x, y
-		db = new Baza(ob1);
+		
 		this.x = x;
 		this.y= y;
 		this.imageId = imageid;

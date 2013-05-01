@@ -46,6 +46,7 @@ public class Baza {
 		wartosci.put(POSITION_Y, positionY);
 		
 		db.insertOrThrow(NAZWA_TABELI, null, wartosci);
+		db.close();
 	}
 	
 	private static String[] FROM = { _ID, IMAGE_ID, DATA_TIME, WIFI_NAME, WIFI_SSID, WIFI_RANGE, POSITION_X, POSITION_Y };
@@ -93,8 +94,8 @@ public class Baza {
 		Cursor kursor = pobierzDane(idImage);
 		
 		
-		/*tworzymy sobie klienta http, zebysmy mogli przesy�a� dane do serwera*/
-		HttpClient httpclient = new DefaultHttpClient();
+		/*tworzymy sobie klienta http, zebysmy mogli przesylac dane do serwera*/
+		HttpClient httpclient;
 //		HttpResponse response = null;
 		
 		while(kursor.moveToNext()){
@@ -111,8 +112,10 @@ public class Baza {
 			wifiName = wifiName.replace(" ", "_");
 	        
 			try {
+				httpclient = new DefaultHttpClient();
 				httpclient.execute(new HttpGet("http://wifihertz.kalinowski.net.pl/index.php?page=addData&imageId="+imageId+"&dataTime="+dataTime+"&wifiName="+wifiName+"&wifiSsid="+wifiSsid+"&wifiRange="+wifiRange+"&positionX="+positionX+"&positionY="+positionY));
 				usunPomiarLokalny(Integer.valueOf(dataId));
+				System.out.println("Synchornizacja: "+ kursor.getPosition() + " z " + kursor.getCount());
 			}
 			catch (ClientProtocolException e) {
 				AlertDialog alert = new AlertDialog.Builder(activity).create();

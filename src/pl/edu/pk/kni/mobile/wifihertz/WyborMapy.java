@@ -47,16 +47,13 @@ public class WyborMapy extends ListActivity implements OnItemClickListener {
 
 		// setContentView(R.layout.activity_wybor_mapy);
 	}
-	
-	
-	
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		this.deleteDatabase("baza.db");
+		//this.deleteDatabase("baza.db");
+		(new Baza(this)).synchronizuj();
 		return true;
 	}
-
-
 
 	private void pobierzListeMap() {
 
@@ -97,18 +94,17 @@ public class WyborMapy extends ListActivity implements OnItemClickListener {
 	}
 
 	public void onItemClick(AdapterView<?> arg0, View v, int index, long l) {
-		// TODO uruchomienie activity pomiaru
 		String nazwa = listaMap.get(index).getNazwa();
 		String adres = listaMap.get(index).getAdresBitmapy();
 		String idObrazka = Integer.toString(listaMap.get(index).getId());
-		
+
 		Intent intent = new Intent(this, EkranPomiaru.class);
 
 		intent.putExtra("nazwa", nazwa);
 		intent.putExtra("adres", adres);
 		intent.putExtra("idObrazka", idObrazka);
 		intent.putExtra("idUsera", Integer.toString(zalogowanyJako));
-		
+
 		startActivity(intent);
 	}
 
