@@ -52,6 +52,7 @@ public class WyborMapy extends ListActivity implements OnItemClickListener {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		//this.deleteDatabase("baza.db");
 		(new Baza(this)).synchronizuj();
+		//startActivity(new Intent(this, EkranSynchronizacji.class));
 		return true;
 	}
 

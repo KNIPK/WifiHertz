@@ -19,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -55,6 +56,7 @@ public class Baza {
 	private void usunPomiarLokalny(int idPomiaru){
 		SQLiteDatabase db = baza.getWritableDatabase();
 		db.delete(NAZWA_TABELI, _ID+"="+idPomiaru, null);
+		db.close();
 		
 	}
 	
@@ -68,22 +70,6 @@ public class Baza {
 		}
 		
 		activity.startManagingCursor(kursor);
-		
-//		AlertDialog alert = new AlertDialog.Builder(activity).create();
-//		alert.setTitle("wpis");
-//        alert.setMessage(""+kursor.getCount());
-//        alert.show();
-		
-		
-//		while(kursor.moveToNext()){
-//			String name = kursor.getString(1);
-//			
-//			//AlertDialog alert = new AlertDialog.Builder(activity).create();
-//			alert.setTitle("wpis");
-//	        alert.setMessage(name);
-//	        alert.show();
-//	        break;
-//		}
         return kursor;
 	}
 	
@@ -96,8 +82,10 @@ public class Baza {
 		
 		/*tworzymy sobie klienta http, zebysmy mogli przesylac dane do serwera*/
 		HttpClient httpclient;
-//		HttpResponse response = null;
-		
+		AlertDialog alert2 = new AlertDialog.Builder(activity).create();
+		alert2.setTitle("Pracuje...");
+        alert2.setMessage("Synchronizacja w toku.");
+        alert2.show();
 		while(kursor.moveToNext()){
 			//kazdy wpis wysylamy na serwer, zeby sprawdzic czy tam juz taki istnieje, jesli nie to dodajemy
 			String dataId = kursor.getString(0);
@@ -115,7 +103,11 @@ public class Baza {
 				httpclient = new DefaultHttpClient();
 				httpclient.execute(new HttpGet("http://wifihertz.kalinowski.net.pl/index.php?page=addData&imageId="+imageId+"&dataTime="+dataTime+"&wifiName="+wifiName+"&wifiSsid="+wifiSsid+"&wifiRange="+wifiRange+"&positionX="+positionX+"&positionY="+positionY));
 				usunPomiarLokalny(Integer.valueOf(dataId));
-				System.out.println("Synchornizacja: "+ kursor.getPosition() + " z " + kursor.getCount());
+				System.out.println("Synchornizacja: "+ (kursor.getPosition()+1) + " z " + kursor.getCount());
+				alert2.setMessage(Integer.toString(kursor.getPosition()+1)				
+						+" / "+ Integer.toString(kursor.getCount())
+						);
+				alert2.show();
 			}
 			catch (ClientProtocolException e) {
 				AlertDialog alert = new AlertDialog.Builder(activity).create();
@@ -123,13 +115,18 @@ public class Baza {
 		        alert.setMessage(e.toString());
 		        alert.show();
 			} catch (IOException e) {
-				AlertDialog alert2 = new AlertDialog.Builder(activity).create();
-				alert2.setTitle("Błąd synchronizacji");
-		        alert2.setMessage(e.toString());
-		        alert2.show();
+				AlertDialog alert3 = new AlertDialog.Builder(activity).create();
+				alert3.setTitle("Błąd synchronizacji");
+		        alert3.setMessage(e.toString());
+		        alert3.show();
 			}
 		}
+		alert2.setTitle("OK");
+        alert2.setMessage("Synchronizacja ukończona.");
+        alert2.show();
+        
 		System.out.println("Wykonano synchronizacje");
+		kursor.close();
 	}
 	
 	

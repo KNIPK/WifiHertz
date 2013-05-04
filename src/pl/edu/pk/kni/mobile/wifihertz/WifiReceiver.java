@@ -39,7 +39,7 @@ public class WifiReceiver extends BroadcastReceiver
 	    	 for(ScanResult listka : res){  
 					db.dodajDane(imageId, listka.SSID, listka.BSSID, ""+listka.level,(int)x, (int)y);
 				}
-	    	System.out.println("onReceive uruchomiony");
+	    	System.out.println("Pomiar wykonany pomyślnie");
 	 		this.czyZapisywacWynik = false;
 			AlertDialog alert = new AlertDialog.Builder(arg0).create();
 			alert.setTitle("Ok");
